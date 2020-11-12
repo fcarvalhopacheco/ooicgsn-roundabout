@@ -25,9 +25,9 @@
 
 {% block content %}
 <div class="container">
-    <h2>Upload Github Calibrations</h2>
+    <h2>Upload Github CSV's</h2>
 
-    <p>Use this tool to upload Calibration CSV's</p>
+    <p>Use this tool to upload GitHub CSV's</p>
 
     <hr>
 
@@ -37,13 +37,13 @@
     <form class="form-horizontal" method="post" enctype="multipart/form-data" novalidate>
         {% csrf_token %}
         {{ form|crispy }}
-
+        <hr>
         {{ dep_form|crispy }}
-
+        <hr>
         {{ cruises_form|crispy }}
-
+        <hr>
         {{ vessels_form|crispy }}
-
+        <hr>
         <div class="control-group">
             <div class="controls">
                 <button id = 'submit' type="submit" class="btn btn-primary">Import</button>
