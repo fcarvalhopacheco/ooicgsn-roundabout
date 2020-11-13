@@ -37,4 +37,5 @@ urlpatterns = [
     #Import Calibrations
     path('import/csv/upload/', view=views.import_csv, name='import_csv'),
     path('import/calibrations/status/', view=views.upload_status, name='upload_status'),
+    # path('configure_imports/', view=views.ImportsListView.as_view(), name='import_config'),
 ]
