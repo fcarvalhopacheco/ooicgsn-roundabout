@@ -219,8 +219,8 @@ def parse_cruise_files(self):
 
         for row in reader:
             cuid = row['CUID']
-            cruise_start_date = parser.parse(row['cruiseStartDateTime']).date()
-            cruise_stop_date = parser.parse(row['cruiseStopDateTime']).date()
+            cruise_start_date = parser.parse(row['cruiseStartDateTime'])
+            cruise_stop_date = parser.parse(row['cruiseStopDateTime'])
             vessel_obj = None
             # parse out the vessel name to match its formatting from Vessel CSV
             vessel_name_csv = row['ShipName'].strip()
@@ -287,7 +287,7 @@ def parse_vessel_files(self):
                 length = Decimal(row['Length (m)'])
 
             if row['Max Speed (m/s)']:
-                max_speed = Decimal(row['Max Draft (m)'])
+                max_speed = Decimal(row['Max Speed (m/s)'])
 
             if row['Max Draft (m)']:
                 max_draft = Decimal(row['Max Draft (m)'])
@@ -331,7 +331,7 @@ def parse_vessel_files(self):
 
 @shared_task(bind=True)
 def parse_deployment_files(self):
-    csv_files = cache.get('csv_files')
+    csv_files = cache.get('dep_files')
     for csv_file in csv_files:
         print(csv_file)
         csv_file.seek(0)
@@ -354,4 +354,4 @@ def parse_deployment_files(self):
         print(deployments[0])
         for row in deployments[0]['rows']:
             print(row)
-    cache.delete('csv_files')
+    cache.delete('dep_files')

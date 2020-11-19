@@ -74,7 +74,7 @@ class ImportVesselsUploadView(LoginRequiredMixin, FormView):
                 length = Decimal(row['Length (m)'])
 
             if row['Max Speed (m/s)']:
-                max_speed = Decimal(row['Max Draft (m)'])
+                max_speed = Decimal(row['Max Speed (m/s)'])
 
             if row['Max Draft (m)']:
                 max_draft = Decimal(row['Max Draft (m)'])
@@ -140,8 +140,8 @@ class ImportCruisesUploadView(LoginRequiredMixin, FormView):
 
         for row in reader:
             cuid = row['CUID']
-            cruise_start_date = parser.parse(row['cruiseStartDateTime']).date()
-            cruise_stop_date = parser.parse(row['cruiseStopDateTime']).date()
+            cruise_start_date = parser.parse(row['cruiseStartDateTime'])
+            cruise_stop_date = parser.parse(row['cruiseStopDateTime'])
             vessel_obj = None
             # parse out the vessel name to match its formatting from Vessel CSV
             vessel_name_csv = row['ShipName'].strip()
@@ -237,7 +237,7 @@ def upload_status(request):
 
 # Deployment CSV Importer
 def import_deployments(csv_files):
-    cache.set('csv_files',csv_files, timeout=None)
+    cache.set('dep_files',csv_files, timeout=None)
     job = parse_deployment_files.delay()
 
 
@@ -246,12 +246,12 @@ def import_cruises(cruises_files):
     cache.set('cruises_files', cruises_files, timeout=None)
     job = parse_cruise_files.delay()
 
-# Vessel CSV Importer 
+# Vessel CSV Importer
 def import_vessels(vessels_files):
     cache.set('vessels_files', vessels_files, timeout=None)
     job = parse_vessel_files.delay()
 
-# Calibration CSV Importer   
+# Calibration CSV Importer
 def import_calibrations(cal_files, user, user_draft):
     csv_files = []
     ext_files = []
@@ -283,22 +283,21 @@ def import_csv(request):
         vessels_file = request.FILES.getlist('vessels_csv')
         if cal_form.is_valid() and len(cal_files) >= 1:
             import_calibrations(cal_files, request.user, cal_form.cleaned_data['user_draft'])
-            return redirect(reverse("ooi_ci_tools:import_csv") + "?confirm=True")
+            confirm = "True"
         if dep_form.is_valid() and len(dep_files) >= 1:
             import_deployments(dep_files)
-            return redirect(reverse("ooi_ci_tools:import_csv") + "?confirm=True")
+            confirm = "True"
         if cruises_form.is_valid() and len(cruises_file) >= 1:
             import_cruises(cruises_file)
-            return redirect(reverse("ooi_ci_tools:import_csv") + "?confirm=True")
+            confirm = "True"
         if vessels_form.is_valid() and len(vessels_file) >= 1:
             import_vessels(vessels_file)
-            return redirect(reverse("ooi_ci_tools:import_csv") + "?confirm=True")
+            confirm = "True"
     else:
         cal_form = ImportCalibrationForm()
         dep_form = ImportDeploymentsForm()
         cruises_form = ImportCruisesForm()
         vessels_form = ImportVesselsForm()
-        confirm = request.GET.get("confirm")
     return render(request, 'ooi_ci_tools/import_tool.html', {
         "form": cal_form,
         'dep_form': dep_form,
