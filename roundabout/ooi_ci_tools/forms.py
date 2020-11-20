@@ -36,6 +36,7 @@ from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
+from .models import ImportConfig
 from roundabout.inventory.models import Inventory, Action, Deployment
 from roundabout.cruises.models import Cruise, Vessel
 from roundabout.inventory.utils import _create_action_history
@@ -54,21 +55,6 @@ class ImportDeploymentsForm(forms.Form):
         ),
         required=False
     )
-    validate_sensor_uid = forms.BooleanField(required=False, initial=True)
-    validate_startDateTime = forms.BooleanField(required=False, initial=True)
-    validate_stopDateTime = forms.BooleanField(required=False, initial=True)
-    validate_lat = forms.BooleanField(required=False, initial=True)
-    validate_lon = forms.BooleanField(required=False, initial=True)
-    validate_mooring_uid = forms.BooleanField(required=False, initial=True)
-    validate_CUID_Deploy = forms.BooleanField(required=False, initial=True)
-    validate_node_uid = forms.BooleanField(required=False, initial=False)
-    validate_versionNumber = forms.BooleanField(required=False, initial=True)
-    validate_deployedBy = forms.BooleanField(required=False, initial=False)
-    validate_CUID_Recover = forms.BooleanField(required=False, initial=True)
-    validate_orbit = forms.BooleanField(required=False, initial=False)
-    validate_deployment_depth = forms.BooleanField(required=False, initial=True)
-    validate_water_depth = forms.BooleanField(required=False, initial=True)
-    validate_notes = forms.BooleanField(required=False, initial=False)
 
     def clean_deployments_csv(self):
         deployments_csv = self.files.getlist('deployments_csv')
@@ -133,20 +119,6 @@ class ImportVesselsForm(forms.Form):
         ),
         required=False
     )
-    validate_prefix = forms.BooleanField(required=False, initial=True)
-    validate_vessel_designation = forms.BooleanField(required=False, initial=True)
-    validate_vessel_name = forms.BooleanField(required=False, initial=True)
-    validate_ICES_code = forms.BooleanField(required=False, initial=True)
-    validate_operator = forms.BooleanField(required=False, initial=True)
-    validate_call_sign = forms.BooleanField(required=False, initial=True)
-    validate_MMSI_number = forms.BooleanField(required=False, initial=True)
-    validate_IMO_number = forms.BooleanField(required=False, initial=True)
-    validate_length = forms.BooleanField(required=False, initial=True)
-    validate_max_speed = forms.BooleanField(required=False, initial=True)
-    validate_max_draft = forms.BooleanField(required=False, initial=True)
-    validate_designation = forms.BooleanField(required=False, initial=True)
-    validate_active = forms.BooleanField(required=False, initial=True)
-    validate_R2R = forms.BooleanField(required=False, initial=True)
 
     def clean_vessels_csv(self):
         vessels_csv = self.files.getlist('vessels_csv')
@@ -242,10 +214,6 @@ class ImportCruisesForm(forms.Form):
         ),
         required=False
     )
-    validate_ship_name = forms.BooleanField(required=False, initial=True)
-    validate_cruise_state_date = forms.BooleanField(required=False, initial=True)
-    validate_cruise_end_date = forms.BooleanField(required=False, initial=True)
-    validate_notes = forms.BooleanField(required=False, initial=True)
     def clean_cruises_csv(self):
         cruises_csv = self.files.getlist('cruises_csv')
         counter = 0
@@ -397,8 +365,6 @@ class ImportCalibrationForm(forms.Form):
         ),
         required = False
     )
-    validate_coefficient_values = forms.BooleanField(required=False, initial=True)
-    validate_notes = forms.BooleanField(required=False, initial=False)
     user_draft = forms.ModelMultipleChoiceField(
         queryset = User.objects.all().exclude(groups__name__in=['inventory only']).order_by('username'),
         required=False,
@@ -417,3 +383,24 @@ class ImportCalibrationForm(forms.Form):
                 csv_files.append(file)
         validate_cal_files(csv_files,ext_files)
         return cal_files
+
+
+# CSV Import Configuration form 
+# Inputs: All fields from Calibration, Deployment, Cruise, and Vessel CSV's
+class ImportConfigForm(forms.ModelForm):
+    class Meta:
+        model = ImportConfig 
+        fields = '__all__'
+        labels = {
+            'require_cal_coefficient_values': 'Coefficient Values'
+        }
+    def __init__(self, *args, **kwargs):
+        super(ImportConfigForm, self).__init__(*args, **kwargs)
+
+    def save(self, commit = True): 
+        import_config = super(ImportConfigForm, self).save(commit = False)
+        if commit:
+            import_config.save()
+            return import_config
+
+

@@ -30,10 +30,11 @@ from django.core.cache import cache
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.views.generic import TemplateView, FormView
+from django.views.generic import TemplateView, FormView, CreateView, UpdateView, DeleteView
+from common.util.mixins import AjaxFormMixin
 
 from roundabout.cruises.models import Cruise, Vessel
-from .forms import ImportDeploymentsForm, ImportVesselsForm, ImportCruisesForm, ImportCalibrationForm
+from .forms import ImportDeploymentsForm, ImportVesselsForm, ImportCruisesForm, ImportCalibrationForm, ImportConfigForm
 from .models import *
 from .tasks import parse_cal_files, parse_cruise_files, parse_vessel_files, parse_deployment_files
 
@@ -305,3 +306,27 @@ def import_csv(request):
         'vessels_form': vessels_form,
         'confirm': confirm
     })
+
+
+# Handles import configurations of Calibration, Deployment, Cruises, and Vessels CSVs
+class ImportConfigUpdate(LoginRequiredMixin, AjaxFormMixin, UpdateView):
+    model = ImportConfig
+    form_class = ImportConfigForm
+    context_object_name = 'import_config'
+    template_name='ooi_ci_tools/import_config.html'
+
+    def get(self, request, *args, **kwargs):
+        if ImportConfig.objects.exists():
+            self.object = self.get_object()
+        else:
+            self.object = ImportConfig.objects.create()
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        return self.render_to_response(
+            self.get_context_data(
+                form=form, 
+            )
+        )
+
+    def get_success_url(self):
+        return reverse('ooi_ci_tools:import_csv')

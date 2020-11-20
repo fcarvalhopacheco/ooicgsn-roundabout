@@ -2,17 +2,45 @@ from django.db import models
 
 
 # CSV Import configuration model
-# class ImportConfig(models.Model):
-#     def __str__(self):
-#         return self.created_at.strftime("%m/%d/%Y")
-#     def get_object_type(self):
-#         return 'import_configuration'
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-#     require_cal_coefficient_values = models.BooleanField(blank=False, default=True)
-#     require_cal_notes = models.BooleanField(blank=False, default=False)
-#     require_dep_sensor_uid = models.BooleanField(blank=False, default=True)
-#     require_cruise_ship_name = models.BooleanField(blank=False, default=True)
-#     require_cruise_start_date = models.BooleanField(blank=False, default=True)
-#     require_cruise_stop_date = models.BooleanField(blank=False, default=True)
-#     require_cruise_notes = models.BooleanField(blank=False, default=True)
+class ImportConfig(models.Model):
+    def __str__(self):
+        return self.created_at.strftime("%m/%d/%Y")
+    def get_object_type(self):
+        return 'import_configuration'
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    require_cal_coefficient_values = models.BooleanField(blank=False, default=True)
+    require_cal_notes = models.BooleanField(blank=False, default=False)
+    require_dep_sensor_uid = models.BooleanField(blank=False, default=True)
+    require_dep_startDateTime = models.BooleanField(blank=False, default=True)
+    require_dep_stopDateTime = models.BooleanField(blank=False, default=True)
+    require_dep_lat = models.BooleanField(blank=False, default=True)
+    require_dep_lon = models.BooleanField(blank=False, default=True)
+    require_dep_mooring_uid = models.BooleanField(blank=False, default=True)
+    require_dep_CUID_Deploy = models.BooleanField(blank=False, default=True)
+    require_dep_node_uid = models.BooleanField(blank=False, default=False)
+    require_dep_versionNumber = models.BooleanField(blank=False, default=True)
+    require_dep_deployedBy = models.BooleanField(blank=False, default=False)
+    require_dep_CUID_Recover = models.BooleanField(blank=False, default=True)
+    require_dep_orbit = models.BooleanField(blank=False, default=False)
+    require_dep_deployment_depth = models.BooleanField(blank=False, default=True)
+    require_dep_water_depth = models.BooleanField(blank=False, default=True)
+    require_dep_notes = models.BooleanField(blank=False, default=False)
+    require_cruise_ship_name = models.BooleanField(blank=False, default=True)
+    require_cruise_cruise_state_date = models.BooleanField(blank=False, default=True)
+    require_cruise_cruise_end_date = models.BooleanField(blank=False, default=True)
+    require_cruise_notes = models.BooleanField(blank=False, default=True)
+    require_vessel_prefix = models.BooleanField(blank=False, default=True)
+    require_vessel_vessel_designation = models.BooleanField(blank=False, default=True)
+    require_vessel_vessel_name = models.BooleanField(blank=False, default=True)
+    require_vessel_ICES_code = models.BooleanField(blank=False, default=True)
+    require_vessel_operator = models.BooleanField(blank=False, default=True)
+    require_vessel_call_sign = models.BooleanField(blank=False, default=True)
+    require_vessel_MMSI_number = models.BooleanField(blank=False, default=True)
+    require_vessel_IMO_number = models.BooleanField(blank=False, default=True)
+    require_vessel_length = models.BooleanField(blank=False, default=True)
+    require_vessel_max_speed = models.BooleanField(blank=False, default=True)
+    require_vessel_max_draft = models.BooleanField(blank=False, default=True)
+    require_vessel_designation = models.BooleanField(blank=False, default=True)
+    require_vessel_active = models.BooleanField(blank=False, default=True)
+    require_vessel_R2R = models.BooleanField(blank=False, default=True)
