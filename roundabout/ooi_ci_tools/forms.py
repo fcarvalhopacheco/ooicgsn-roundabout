@@ -46,6 +46,238 @@ from roundabout.configs_constants.models import ConfigName
 from roundabout.users.models import User
 
 
+def validate_import_config_calibrations(import_config, reader):
+    for idx, row in enumerate(reader):
+        row_data = row.items()
+        for key, value in row_data:
+            if key == 'value':
+                try:
+                    raw_valset = str(value)
+                except:
+                    raise ValidationError(
+                        _('Row %(row)s: Unable to parse Calibration Coefficient value(s)'),
+                        params={'row': idx, },
+                    )
+                if import_config.require_calibration_coefficient_values:
+                    if len(raw_valset) == 0:
+                        raise ValidationError(
+                            _('Row %(row)s: Import Config disallows blank Calibration Coefficient value(s)'),
+                            params={'row': idx}
+                        )
+            if key == 'notes':
+                try:
+                    notes = value.strip()
+                except:
+                    raise ValidationError(
+                        _('Row %(row)s: Unable to parse Calibration Notes'),
+                        params={'row': idx, },
+                    )
+                if import_config.require_calibration_coefficient_notes:
+                    if len(notes) == 0:
+                        raise ValidationError(
+                            _('Row %(row)s: Import Config disallows blank Calibration Notes'),
+                            params={'row': idx}
+                        )
+
+def validate_import_config_deployments(import_config,reader):
+    for idx,row in enumerate(reader):
+        try:
+            sensor_uid = row['sensor.uid']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Sensor UID'),
+                params={'row': idx}
+            )
+        if import_config.require_deployment_sensor_uid:
+            if len(sensor_uid) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Sensor UID'),
+                    params={'row': idx}
+                )
+        try:
+            start_date = row['startDateTime']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Start Date'),
+                params={'row': idx}
+            )
+        if import_config.require_deployment_startDateTime:
+            if len(start_date) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Start Date'),
+                    params={'row': idx}
+                )
+        try:
+            stop_date = row['stopDateTime']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Stop Date'),
+                params={'row': idx}
+            )
+        if import_config.require_deployment_stopDateTime:
+            if len(stop_date) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Stop Date'),
+                    params={'row': idx}
+                )
+        try:
+            lat = row['lat']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Latitude'),
+                params={'row': idx}
+            )
+        if import_config.require_deployment_lat:
+            if len(lat) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Latitude'),
+                    params={'row': idx}
+                )
+        try:
+            lon = row['lon']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Longitude'),
+                params={'row': idx}
+            )
+        if import_config.require_deployment_lon:
+            if len(lon) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Longitude'),
+                    params={'row': idx}
+                )
+        try:
+            mooring_uid = row['mooring.uid']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Mooring UID'),
+                params={'row': idx}
+            )
+        if import_config.require_deployment_mooring_uid:
+            if len(mooring_uid) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Mooring UID'),
+                    params={'row': idx}
+                )
+        try:
+            cuid_deploy = row['CUID_Deploy']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse CUID Deploy'),
+                params={'row': idx}
+            )
+        if import_config.require_deployment_CUID_Deploy:
+            if len(cuid_deploy) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank CUID Deploy'),
+                    params={'row': idx}
+                )
+        try:
+            node_uid = row['node.uid']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Node UID'),
+                params={'row': idx}
+            )
+        if import_config.require_deployment_node_uid:
+            if len(node_uid) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Node UID'),
+                    params={'row': idx}
+                )
+        try:
+            version_number = row['versionNumber']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Version Number'),
+                params={'row': idx}
+            )
+        if import_config.require_deployment_versionNumber:
+            if len(version_number) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Version Number'),
+                    params={'row': idx}
+                )
+        try:
+            deployed_by = row['deployedBy']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Deployed By'),
+                params={'row': idx}
+            )
+        if import_config.require_deployment_deployedBy:
+            if len(deployed_by) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Deployed By'),
+                    params={'row': idx}
+                )
+        try:
+            CUID_Recover = row['CUID_Recover']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse CUID Recover'),
+                params={'row': idx}
+            )
+        if import_config.require_deployment_CUID_Recover:
+            if len(CUID_Recover) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank CUID Recover'),
+                    params={'row': idx}
+                )
+        try:
+            orbit = row['orbit']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Orbit'),
+                params={'row': idx}
+            )
+        if import_config.require_deployment_orbit:
+            if len(orbit) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Orbit'),
+                    params={'row': idx}
+                )
+        try:
+            deployment_depth = row['deployment_depth']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Depth'),
+                params={'row': idx}
+            )
+        if import_config.require_deployment_deployment_depth:
+            if len(deployment_depth) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Depth'),
+                    params={'row': idx}
+                )
+        try:
+            water_depth = row['water_depth']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Water Depth'),
+                params={'row': idx}
+            )
+        if import_config.require_deployment_water_depth:
+            if len(water_depth) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Water Depth'),
+                    params={'row': idx}
+                )
+        try:
+            notes = row['notes']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Notes'),
+                params={'row': idx}
+            )
+        if import_config.require_deployment_notes:
+            if len(notes) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Notes'),
+                    params={'row': idx}
+                )
+
+
 class ImportDeploymentsForm(forms.Form):
     deployments_csv = forms.FileField(
         widget=forms.ClearableFileInput(
@@ -59,6 +291,10 @@ class ImportDeploymentsForm(forms.Form):
     def clean_deployments_csv(self):
         deployments_csv = self.files.getlist('deployments_csv')
         counter = 0
+        try:
+            import_config = ImportConfig.objects.get(id=1)
+        except ImportConfig.DoesNotExist:
+            import_config = None
         for csv_file in deployments_csv:
             counter += 1
             filename = csv_file.name[:-4]
@@ -77,6 +313,8 @@ class ImportDeploymentsForm(forms.Form):
                     params={'filename': filename},
                 )
             deployments = []
+            if import_config:
+                validate_import_config_deployments(import_config, reader)
             for row in reader:
                 try:
                     mooring_id = row['mooring.uid']
@@ -263,6 +501,10 @@ class ImportCruisesForm(forms.Form):
 
 def validate_cal_files(csv_files,ext_files):
     counter = 0
+    try:
+        import_config = ImportConfig.objects.get(id=1)
+    except ImportConfig.DoesNotExist:
+        import_config = None
     for cal_csv in csv_files:
         counter += 1
         cal_csv_filename = cal_csv.name[:-4]
@@ -302,6 +544,8 @@ def validate_cal_files(csv_files,ext_files):
                 _('File: %(filename)s, %(value)s: More than one existing Deployment associated with File Deployment Date'),
                 params={'value': cal_date_string, 'filename': cal_csv.name},
             )
+        if import_config:
+            validate_import_config_calibrations(import_config, reader)
         for idx, row in enumerate(reader):
             row_data = row.items()
             for key, value in row_data:
@@ -343,9 +587,7 @@ def validate_cal_files(csv_files,ext_files):
                         reader = io.StringIO(ref_file.read().decode('utf-8'))
                         contents = reader.getvalue()
                         raw_valset = contents
-                        validate_coeff_vals(mock_valset_instance, cal_name_item.value_set_type, raw_valset, filename = ref_file.name, cal_name = calibration_name)
-                    else:
-                        validate_coeff_vals(mock_valset_instance, cal_name_item.value_set_type, raw_valset, filename = cal_csv.name, cal_name = calibration_name)
+                    validate_coeff_vals(mock_valset_instance, cal_name_item.value_set_type, raw_valset, filename = cal_csv.name, cal_name = calibration_name)
                 elif key == 'notes':
                     try:
                         notes = value.strip()
@@ -354,6 +596,7 @@ def validate_cal_files(csv_files,ext_files):
                             _('File: %(filename)s, Calibration Name: %(value)s, Row %(row)s: Unable to parse Calibration Coefficient note(s)'),
                             params={'value': calibration_name, 'row': idx, 'filename': cal_csv.name},
                         )
+                    
 
 
 class ImportCalibrationForm(forms.Form):
