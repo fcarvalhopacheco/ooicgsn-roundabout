@@ -277,6 +277,245 @@ def validate_import_config_deployments(import_config,reader):
                     params={'row': idx}
                 )
 
+def validate_import_config_cruises(import_config, reader):
+    for idx, row in enumerate(reader):
+        try:
+            ship_name = row['ShipName']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Ship Name'),
+                params={'row': idx},
+            )
+        if import_config.require_cruise_ship_name:
+            if len(ship_name) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Ship Name'),
+                    params={'row': idx}
+                )
+        try:
+            start_date = row['cruiseStartDateTime']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Start Date'),
+                params={'row': idx},
+            )
+        if import_config.require_cruise_cruise_start_date:
+            if len(start_date) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Start Date'),
+                    params={'row': idx}
+                )
+        try:
+            stop_date = row['cruiseStopDateTime']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Stop Date'),
+                params={'row': idx},
+            )
+        if import_config.require_cruise_cruise_end_date:
+            if len(stop_date) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Stop Date'),
+                    params={'row': idx}
+                )
+        try:
+            notes = row['notes']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Notes'),
+                params={'row': idx},
+            )
+        if import_config.require_cruise_notes:
+            if len(notes) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Notes'),
+                    params={'row': idx}
+                )
+
+def validate_import_config_vessels(import_config, reader):
+    for idx, row in enumerate(reader):
+        try:
+            prefix = row['Prefix']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Prefix'),
+                params={'row': idx},
+            )
+        if import_config.require_vessel_prefix:
+            if len(prefix) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Prefix'),
+                    params={'row': idx}
+                )
+        try:
+            v_des = row['Vessel Designation']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Vessel Designation'),
+                params={'row': idx},
+            )
+        if import_config.require_vessel_vessel_designation:
+            if len(v_des) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Vessel Designation'),
+                    params={'row': idx}
+                )
+        try:
+            v_name = row['Vessel Name']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Vessel Name'),
+                params={'row': idx},
+            )
+        if import_config.require_vessel_vessel_name:
+            if len(v_name) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Vessel Name'),
+                    params={'row': idx}
+                )
+        try:
+            ices = row['ICES Code']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse ICES Code'),
+                params={'row': idx},
+            )
+        if import_config.require_vessel_ICES_code:
+            if len(ices) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank ICES Code'),
+                    params={'row': idx}
+                )
+        try:
+            operator = row['Operator']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Operator'),
+                params={'row': idx},
+            )
+        if import_config.require_vessel_operator:
+            if len(operator) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Operator'),
+                    params={'row': idx}
+                )
+        try:
+            call_sign = row['Call Sign']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Call Sign'),
+                params={'row': idx},
+            )
+        if import_config.require_vessel_call_sign:
+            if len(call_sign) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Call Sign'),
+                    params={'row': idx}
+                )
+        try:
+            mmsi = row['MMSI#']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse MMSI Number'),
+                params={'row': idx},
+            )
+        if import_config.require_vessel_MMSI_number:
+            if len(mmsi) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank MMSI Number'),
+                    params={'row': idx}
+                )
+        try:
+            imo = row['IMO#']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse IMO Number'),
+                params={'row': idx},
+            )
+        if import_config.require_vessel_IMO_number:
+            if len(imo) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank IMO Number'),
+                    params={'row': idx}
+                )
+        try:
+            length_m = row['Length (m)']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Length (m)'),
+                params={'row': idx},
+            )
+        if import_config.require_vessel_length:
+            if len(length_m) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Length (m)'),
+                    params={'row': idx}
+                )
+        try:
+            max_speed = row['Max Speed (m/s)']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Max Speed (m/s)'),
+                params={'row': idx},
+            )
+        if import_config.require_vessel_max_speed:
+            if len(max_speed) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Max Speed (m/s)'),
+                    params={'row': idx}
+                )
+        try:
+            max_draft = row['Max Draft (m)']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Max Draft (m)'),
+                params={'row': idx},
+            )
+        if import_config.require_vessel_max_draft:
+            if len(max_draft) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Max Draft (m)'),
+                    params={'row': idx}
+                )
+        try:
+            des = row['Designation']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Designation'),
+                params={'row': idx},
+            )
+        if import_config.require_vessel_designation:
+            if len(des) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Designation'),
+                    params={'row': idx}
+                )
+        try:
+            active = row['Active']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse Active'),
+                params={'row': idx},
+            )
+        if import_config.require_vessel_active:
+            if len(active) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank Active'),
+                    params={'row': idx}
+                )
+        try:
+            r2r = row['R2R']
+        except:
+            raise ValidationError(
+                _('Row %(row)s: Unable to parse R2R'),
+                params={'row': idx},
+            )
+        if import_config.require_vessel_R2R:
+            if len(r2r) == 0:
+                raise ValidationError(
+                    _('Row %(row)s: Import Config disallows blank R2R'),
+                    params={'row': idx}
+                )
 
 class ImportDeploymentsForm(forms.Form):
     deployments_csv = forms.FileField(
@@ -361,6 +600,10 @@ class ImportVesselsForm(forms.Form):
     def clean_vessels_csv(self):
         vessels_csv = self.files.getlist('vessels_csv')
         counter = 0
+        try:
+            import_config = ImportConfig.objects.get(id=1)
+        except ImportConfig.DoesNotExist:
+            import_config = None
         for csv_file in vessels_csv:
             counter += 1
             filename = csv_file.name[:-4]
@@ -378,6 +621,8 @@ class ImportVesselsForm(forms.Form):
                     _('File: %(filename)s: Unable to decode file headers'),
                     params={'filename': filename},
                 )
+            if import_config:
+                validate_import_config_vessels(import_config, reader)
             for row in reader:
                 try:
                     vessel_name = row['Vessel Name']
@@ -455,6 +700,10 @@ class ImportCruisesForm(forms.Form):
     def clean_cruises_csv(self):
         cruises_csv = self.files.getlist('cruises_csv')
         counter = 0
+        try:
+            import_config = ImportConfig.objects.get(id=1)
+        except ImportConfig.DoesNotExist:
+            import_config = None
         for csv_file in cruises_csv:
             filename = csv_file.name[:-4]
             counter += 1
@@ -472,6 +721,8 @@ class ImportCruisesForm(forms.Form):
                     _('File: %(filename)s: Unable to decode file headers'),
                     params={'filename': filename},
                 )
+            if import_config:
+                validate_import_config_cruises(import_config, reader)
             for row in reader:
                 try:
                     cuid = row['CUID']
@@ -635,7 +886,41 @@ class ImportConfigForm(forms.ModelForm):
         model = ImportConfig 
         fields = '__all__'
         labels = {
-            'require_cal_coefficient_values': 'Coefficient Values'
+            'require_calibration_coefficient_values': 'Coefficient value(s)',
+            'require_calibration_notes': 'Notes',
+            'require_deployment_sensor_uid': 'Sensor UID',
+            'require_deployment_startDateTime': 'Start Date',
+            'require_deployment_stopDateTime': 'Stop Date',
+            'require_deployment_lat': 'Latitude',
+            'require_deployment_lon': 'Longitude',
+            'require_deployment_mooring_uid': 'Mooring UID',
+            'require_deployment_CUID_Deploy': 'CUID Deploy',
+            'require_deployment_node_uid': 'Node UID',
+            'require_deployment_versionNumber': 'Version Number',
+            'require_deployment_deployedBy': 'Deployed By',
+            'require_deployment_CUID_Recover': 'CUID Recover',
+            'require_deployment_orbit': 'Orbit',
+            'require_deployment_deployment_depth': 'Depth',
+            'require_deployment_water_depth': 'Water Depth',
+            'require_deployment_notes': 'Notes',
+            'require_cruise_ship_name': 'Ship Name',
+            'require_cruise_cruise_start_date': 'Start Date',
+            'require_cruise_cruise_end_date': 'Stop Date',
+            'require_cruise_notes': 'Notes',
+            'require_vessel_prefix': 'Prefix',
+            'require_vessel_vessel_designation': 'Designation',
+            'require_vessel_vessel_name': 'Vessel Name',
+            'require_vessel_ICES_code': 'ICES Code',
+            'require_vessel_operator': 'Operator',
+            'require_vessel_call_sign': 'Call Sign',
+            'require_vessel_MMSI_number': 'MMSI Number',
+            'require_vessel_IMO_number': 'IMO Number',
+            'require_vessel_length': 'Length (m)',
+            'require_vessel_max_speed': 'Max Speed (m/s)',
+            'require_vessel_max_draft': 'Max Draft (m)',
+            'require_vessel_designation': 'Designation',
+            'require_vessel_active': 'Active',
+            'require_vessel_R2R': 'R2R'
         }
     def __init__(self, *args, **kwargs):
         super(ImportConfigForm, self).__init__(*args, **kwargs)

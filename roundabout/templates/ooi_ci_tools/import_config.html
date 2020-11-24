@@ -27,13 +27,63 @@
 <div class="container">
     <h2>CSV Import Configuration Tool</h2>
 
-    <p>Use this tool to configure the import of GitHub CSV's from the <a href="https://github.com/oceanobservatories/asset-management">OOI-CGSN Asset Management</a> repository.</p>
+    <p>Use this tool to configure field population requirements for the import of GitHub CSV's from the <a href="https://github.com/oceanobservatories/asset-management">OOI-CGSN Asset Management</a> repository.</p>
 
     <hr>
     
     <form class="form-horizontal" method="post" enctype="multipart/form-data" novalidate>
         {% csrf_token %}
-        {{ form|crispy }}
+        {{ form.management_form }}
+        <h3>Calibrations</h3>
+        <ul class = 'list-group'>
+            <li class = 'list-group-item'>{{form.require_calibration_coefficient_values}} {{form.require_calibration_coefficient_values.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_calibration_notes}} {{form.require_calibration_notes.label_tag}}</li>
+        </ul>
+        <hr>
+        <h3>Deployments</h3>
+        <ul class = 'list-group'>
+            <li class = 'list-group-item'>{{form.require_deployment_sensor_uid}} {{form.require_deployment_sensor_uid.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_deployment_startDateTime}} {{form.require_deployment_startDateTime.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_deployment_stopDateTime}} {{form.require_deployment_stopDateTime.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_deployment_lat}} {{form.require_deployment_lat.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_deployment_lon}} {{form.require_deployment_lon.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_deployment_mooring_uid}} {{form.require_deployment_mooring_uid.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_deployment_CUID_Deploy}} {{form.require_deployment_CUID_Deploy.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_deployment_node_uid}} {{form.require_deployment_node_uid.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_deployment_versionNumber}} {{form.require_deployment_versionNumber.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_deployment_deployedBy}} {{form.require_deployment_deployedBy.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_deployment_CUID_Recover}} {{form.require_deployment_CUID_Recover.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_deployment_orbit}} {{form.require_deployment_orbit.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_deployment_deployment_depth}} {{form.require_deployment_deployment_depth.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_deployment_water_depth}} {{form.require_deployment_water_depth.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_deployment_notes}} {{form.require_deployment_notes.label_tag}}</li>
+        </ul>
+        <hr>
+        <h3>Cruises</h3>
+        <ul class = 'list-group'>
+            <li class = 'list-group-item'>{{form.require_cruise_ship_name}} {{form.require_cruise_ship_name.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_cruise_cruise_start_date}} {{form.require_cruise_cruise_start_date.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_cruise_cruise_end_date}} {{form.require_cruise_cruise_end_date.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_cruise_notes}} {{form.require_cruise_notes.label_tag}}</li>
+        </ul>
+        <hr>
+        <h3>Vessels</h3>
+        <ul class = 'list-group'>
+            <li class = 'list-group-item'>{{form.require_vessel_prefix}} {{form.require_vessel_prefix.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_vessel_vessel_designation}} {{form.require_vessel_vessel_designation.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_vessel_vessel_name}} {{form.require_vessel_vessel_name.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_vessel_ICES_code}} {{form.require_vessel_ICES_code.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_vessel_operator}} {{form.require_vessel_operator.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_vessel_call_sign}} {{form.require_vessel_call_sign.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_vessel_MMSI_number}} {{form.require_vessel_MMSI_number.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_vessel_IMO_number}} {{form.require_vessel_IMO_number.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_vessel_length}} {{form.require_vessel_length.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_vessel_max_speed}} {{form.require_vessel_max_speed.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_vessel_max_draft}} {{form.require_vessel_max_draft.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_vessel_designation}} {{form.require_vessel_designation.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_vessel_active}} {{form.require_vessel_active.label_tag}}</li>
+            <li class = 'list-group-item'>{{form.require_vessel_R2R}} {{form.require_vessel_R2R.label_tag}}</li>
+        </ul>
         <hr>
         <div class="control-group">
             <div class="controls">

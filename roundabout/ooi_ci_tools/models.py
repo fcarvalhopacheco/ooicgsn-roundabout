@@ -27,7 +27,7 @@ class ImportConfig(models.Model):
     require_deployment_water_depth = models.BooleanField(blank=False, default=True)
     require_deployment_notes = models.BooleanField(blank=False, default=False)
     require_cruise_ship_name = models.BooleanField(blank=False, default=True)
-    require_cruise_cruise_state_date = models.BooleanField(blank=False, default=True)
+    require_cruise_cruise_start_date = models.BooleanField(blank=False, default=True)
     require_cruise_cruise_end_date = models.BooleanField(blank=False, default=True)
     require_cruise_notes = models.BooleanField(blank=False, default=True)
     require_vessel_prefix = models.BooleanField(blank=False, default=True)
