@@ -53,6 +53,7 @@
                     </div>
                 </td>
             </tr>
+            {% if deployment.deployed_location %}
             <tr>
                 <th>{{ label_deployments_app_singular }} Location</th>
                 <td>
@@ -62,6 +63,7 @@
                     </a>
                 </td>
             </tr>
+            {% endif %}
             {% if deployment.deployment_to_field_date %}
             <tr>
                 <th>{{ label_deployments_app_singular }} to Field Date</th>
@@ -103,18 +105,24 @@
             </tr>
             {% endif %}
             {% if deployment.current_status != 'startdeployment' and deployment.current_status != 'deploymentburnin' %}
-            <tr>
-                <th>Latitude</th>
-                <td>{{ deployment.latitude }} &deg; N</td>
-            </tr>
-            <tr>
-                <th>Longitude</th>
-                <td>{{ deployment.longitude }} &deg; E</td>
-            </tr>
-            <tr>
-                <th>Depth</th>
-                <td>{{ deployment.depth }} m</td>
-            </tr>
+                {% if deployment.latitude %}
+                <tr>
+                    <th>Latitude</th>
+                    <td>{{ deployment.latitude }} &deg; N</td>
+                </tr>
+                {% endif %}
+                {% if deployment.longitude %}
+                <tr>
+                    <th>Longitude</th>
+                    <td>{{ deployment.longitude }} &deg; E</td>
+                </tr>
+                {% endif %}
+                {% if deployment.depth %}
+                <tr>
+                    <th>Depth</th>
+                    <td>{{ deployment.depth }} m</td>
+                </tr>
+                {% endif %}
             {% endif %}
         </tbody>
     </table>

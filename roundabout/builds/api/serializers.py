@@ -28,6 +28,8 @@ from roundabout.core.templatetags.common_tags import time_at_sea_display
 from roundabout.cruises.models import Cruise
 from roundabout.inventory.models import Deployment
 from roundabout.locations.models import Location
+from roundabout.configs_constants.models import ConfigEvent
+from roundabout.calibrations.models import CalibrationEvent
 from ..models import Build
 
 API_VERSION = 'api_v1'
@@ -184,17 +186,85 @@ class DeploymentSerializer(FlexFieldsModelSerializer):
 class DeploymentOmsCustomSerializer(FlexFieldsModelSerializer):
     deployment_id = serializers.IntegerField(source='id')
     build_id = serializers.SerializerMethodField('get_build_id')
+    build_number = serializers.SerializerMethodField('get_build_number')
+    assembly_parts = serializers.SerializerMethodField('get_assembly_parts')
 
     class Meta:
         model = Deployment
         fields = [
-            'deployment_id',
             'build_id',
+            'build_number',
+            'deployment_id',
             'deployment_number',
             'current_status',
+            'assembly_parts',
         ]
 
     def get_build_id(self, obj):
         if obj.build:
             return obj.build.id
         return None
+
+    def get_build_number(self, obj):
+        if obj.build:
+            return obj.build.build_number
+        return None
+
+    def get_assembly_parts(self, obj):
+        try:
+            # Use the InventoryDeployment related model to get historical list of Inventory items
+            # on each Deployment
+            inventory_dep_qs = obj.inventory_deployments.exclude(current_status=Deployment.DEPLOYMENTRETIRE)
+            assembly_parts = []
+
+            for inv in inventory_dep_qs:
+                # get all config_events for this Inventory/Deployment
+                configuration_values = []
+                config_events = ConfigEvent.objects.filter(inventory=inv.inventory).filter(deployment=inv.deployment)
+                if config_events:
+                    for event in config_events:
+                        for value in event.config_values.all():
+                            configuration_values.append({
+                                'name': value.config_name.name,
+                                'value': value.config_value,
+                            })
+
+                # get all constant_default_events for this Inventory/Deployment
+                constant_default_values = []
+                if inv.inventory.constant_default_events.exists():
+                    for event in inv.inventory.constant_default_events.all():
+                        for value in event.constant_defaults.all():
+                            constant_default_values.append({
+                                'name': value.config_name.name,
+                                'value': value.default_value,
+                            })
+
+                # get all custom_fields for this Inventory/Deployment
+                custom_fields = []
+                if inv.inventory.fieldvalues.exists():
+                    inv_custom_fields = inv.inventory.fieldvalues.filter(is_current=True).select_related('field')
+                    # create initial empty dict
+                    for field in inv_custom_fields:
+                        custom_fields.append({
+                            'name': field.field.field_name,
+                            'value': field.field_value,
+                        })
+
+                # create object to populate the "assembly_part" list
+                item_obj = {
+                    'assembly_part_id': inv.assembly_part_id,
+                    'part_name': inv.inventory.part.name,
+                    'parent_assembly_part_id': inv.assembly_part.parent_id if inv.assembly_part else None,
+                    'inventory_id': inv.inventory_id,
+                    'inventory_serial_number': inv.inventory.serial_number,
+                    'configuration_values': configuration_values,
+                    'constant_default_values': constant_default_values,
+                    'custom_fields': custom_fields,
+                }
+                assembly_parts.append(item_obj)
+
+            return assembly_parts
+
+        except Exception as e:
+            print(e)
+            return None
