@@ -38,7 +38,7 @@ from roundabout.cruises.models import Cruise, Vessel
 from roundabout.inventory.models import Inventory, Action, Deployment
 from roundabout.inventory.utils import _create_action_history
 
-
+# Post-validation Calibration file parser
 @shared_task(bind = True)
 def parse_cal_files(self):
     self.update_state(state='PROGRESS', meta = {'key': 'started',})
@@ -196,7 +196,7 @@ def parse_cal_files(self):
     cache.delete('csv_files')
 
 
-
+# Post-validation Cruise file parser
 @shared_task(bind=True)
 def parse_cruise_files(self):
     cruises_files = cache.get('cruises_files')
@@ -247,7 +247,7 @@ def parse_cruise_files(self):
                 cruises_updated.append(cruise_obj)
     cache.delete('cruises_files')
 
-
+# Post-validation Vessel file parser
 @shared_task(bind=True)
 def parse_vessel_files(self):
     vessels_files = cache.get('vessels_files')
@@ -322,6 +322,7 @@ def parse_vessel_files(self):
                 vessels_updated.append(vessel_obj)
     cache.delete('vessels_files')
 
+# Post-validation Deployment file parser
 @shared_task(bind=True)
 def parse_deployment_files(self):
     csv_files = cache.get('dep_files')

@@ -29,11 +29,19 @@
           <input class="btn btn-link cancel-btn"
                  type="button" value="Cancel"
                  data-detail-url="{% url 'inventory:ajax_inventory_detail' event_template.inventory.id %}"/>
-          <input data-detail-url="{% url 'inventory:ajax_inventory_detail' event_template.inventory.id %}" class="btn btn-danger" type="submit" value="Confirm"/>
+          <input id ='submit' data-detail-url="{% url 'inventory:ajax_inventory_detail' event_template.inventory.id %}" class="btn btn-danger" type="submit" value="Confirm"/>
       </form>
   </div>
 </div>
 
 {% block javascript %}
+<script>
+    $(document).ready(function() {
 
+        let inventory_id = '{{event_template.inventory.id}}'
+        $('#submit').on('click', function() {
+            location.href = '/inventory/' + inventory_id + '/';
+        })
+    });
+</script>
 {% endblock javascript %}

@@ -223,7 +223,7 @@ class ImportUploadSuccessView(TemplateView):
     template_name = "ooi_ci_tools/import_upload_success.html"
 
 
-
+# Retrieve current file and iteration number during import validation
 def upload_status(request):
     # import_task = cache.get('import_task')
     # if import_task is None:

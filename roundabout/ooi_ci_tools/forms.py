@@ -46,6 +46,7 @@ from roundabout.configs_constants.models import ConfigName
 from roundabout.users.models import User
 
 
+# # Calibration CSV import config validator
 def validate_import_config_calibrations(import_config, reader):
     for idx, row in enumerate(reader):
         row_data = row.items()
@@ -79,6 +80,7 @@ def validate_import_config_calibrations(import_config, reader):
                             params={'row': idx}
                         )
 
+# Deployment CSV import config validator
 def validate_import_config_deployments(import_config,reader):
     for idx,row in enumerate(reader):
         try:
@@ -277,6 +279,7 @@ def validate_import_config_deployments(import_config,reader):
                     params={'row': idx}
                 )
 
+# Cruise CSV import config validator
 def validate_import_config_cruises(import_config, reader):
     for idx, row in enumerate(reader):
         try:
@@ -332,6 +335,7 @@ def validate_import_config_cruises(import_config, reader):
                     params={'row': idx}
                 )
 
+# Vessel CSV import config validator
 def validate_import_config_vessels(import_config, reader):
     for idx, row in enumerate(reader):
         try:
@@ -517,6 +521,7 @@ def validate_import_config_vessels(import_config, reader):
                     params={'row': idx}
                 )
 
+# Deployment CSV Import form
 class ImportDeploymentsForm(forms.Form):
     deployments_csv = forms.FileField(
         widget=forms.ClearableFileInput(
@@ -586,7 +591,7 @@ class ImportDeploymentsForm(forms.Form):
                     deployment['rows'].append({key: value})
         return deployments_csv
 
-
+# Vessel CSV import form
 class ImportVesselsForm(forms.Form):
     vessels_csv = forms.FileField(
         widget=forms.ClearableFileInput(
@@ -693,6 +698,7 @@ class ImportVesselsForm(forms.Form):
         return vessels_csv
 
 
+# Cruise CSV import form
 class ImportCruisesForm(forms.Form):
     cruises_csv = forms.FileField(
         widget=forms.ClearableFileInput(
@@ -754,7 +760,7 @@ class ImportCruisesForm(forms.Form):
         return cruises_csv
 
 
-
+# Calibration CSV File validator
 def validate_cal_files(csv_files,ext_files):
     counter = 0
     try:
@@ -874,7 +880,7 @@ def validate_cal_files(csv_files,ext_files):
                         )
                     
 
-
+# Calibration CSV Import form
 class ImportCalibrationForm(forms.Form):
     calibration_csv = forms.FileField(
         widget=forms.ClearableFileInput(

@@ -30,17 +30,17 @@
             addText: 'Add Configurations/Constants',
             deleteText: 'Remove',
             removed: function(row) {
-                let del = row.find('input:hidden[id $= "-DELETE"]')                
-                let totalForms = $("[id$='TOTAL_FORMS']")
+                let del = row.find('input:hidden[id $= "-DELETE"]');                
+                let totalForms = $("[id$='TOTAL_FORMS']");
                 if( confirm('Warning: deleting Names will delete associated Defaults and Event data') ) {
-                    del.val('on')
-                    row.hide()
+                    del.val('on');
+                    row.hide();
                 } else {
-                    del.val('')
-                    row.show()
+                    del.val('');
+                    row.show();
                 }
                 forms = $('.dynamic-form').not(':hidden');
-                totalForms.val(forms.length)
+                totalForms.val(forms.length);
             }
         });
 
@@ -55,7 +55,7 @@
             if (removeButtons.length > 1) {
                 removeButtons.map((idx, button) => {
                     if (idx != 0) {
-                        button.remove()
+                        button.remove();
                     }
                 })
             }
@@ -65,7 +65,7 @@
         if (formAddRows.length > 1) {
             formAddRows.map((idx, button) => {
                 if (idx != 0) {
-                    button.remove()
+                    button.remove();
                 }
             })
         }
