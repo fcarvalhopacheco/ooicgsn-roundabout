@@ -47,6 +47,12 @@
         <div class="control-group">
             <div class="controls">
                 <button id = 'submit' type="submit" class="btn btn-primary">Import</button>
+                <input  class="btn btn-light cancel-btn" 
+                        type="button" 
+                        value="Cancel"
+                        data-detail-url="{% url 'parts:parts_home' %}"
+                        id = 'cancel'
+                />
             </div>
         </div>
   </form>
@@ -99,6 +105,10 @@
         $('#submit').on('click', function() {
             update_status();
         });
+
+        $('#cancel').on('click', function() {
+            location.href = '/';
+        })
     });
 </script>
 {% endblock javascript %}

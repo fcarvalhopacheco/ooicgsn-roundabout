@@ -107,23 +107,23 @@
             </div>
             <h5 id = '__all__'>Calibration(s)</h5>
             <table class="table table-tight calibration-form" style = 'display:block; overflow: auto; max-height: 100vh'>
-              <thead>
-                  <th>Name</th>
-                  <th>Type</th>
-                  <th>Significant Figures</th>
-                  <th>Deprecated</th>
-              </thead>
-              <tbody>
-                {{ part_calname_form.management_form }}
-                {% for cal in part_calname_form %}
-                  <tr>
-                      <td>{% if cal.id  %}{{ cal.DELETE }}{% endif %} {{ cal.id }} {{ cal.calibration_name }}</td>
-                      <td>{% if cal.id  %}{{ cal.DELETE }}{% endif %} {{ cal.id }} {{ cal.value_set_type }}</td>
-                      <td>{% if cal.id  %}{{ cal.DELETE }}{% endif %} {{ cal.id }} {{ cal.sigfig_override }} <small class = 'form-text text-muted'>{{cal.sigfig_override.help_text}}</small></td>
-                      <td>{% if cal.id  %}{{ cal.DELETE }}{% endif %} {{ cal.id }} {{ cal.deprecated }}</td>
-                  </tr>
-                {% endfor %}
-              </tbody>
+                <thead>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Significant Figures</th>
+                    <th>Deprecated</th>
+                </thead>
+                <tbody>
+                    {{ part_calname_form.management_form }}
+                    {% for cal in part_calname_form %}
+                    <tr>
+                        <td>{% if cal.id  %}{{ cal.DELETE }}{% endif %} {{ cal.id }} {{ cal.calibration_name }}</td>
+                        <td>{% if cal.id  %}{{ cal.DELETE }}{% endif %} {{ cal.id }} {{ cal.value_set_type }}</td>
+                        <td>{% if cal.id  %}{{ cal.DELETE }}{% endif %} {{ cal.id }} {{ cal.sigfig_override }} <small class = 'form-text text-muted'>{{cal.sigfig_override.help_text}}</small></td>
+                        <td>{% if cal.id  %}{{ cal.DELETE }}{% endif %} {{ cal.id }} {{ cal.deprecated }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
             </table>
           </div>
 
