@@ -155,9 +155,8 @@ def parse_cal_files(self):
                             }
                             const_val_sets.append(const_val_set)
         if user_draft.exists():
-            draft_users = user_draft
-            for user in draft_users:
-                csv_event.user_draft.add(user)
+            for draft_user in user_draft:
+                csv_event.user_draft.add(draft_user)
         if len(coeff_val_sets) >= 1:
             for valset in coeff_val_sets:
                 valset['calibration_event'] = csv_event
@@ -232,14 +231,10 @@ def parse_cruise_files(self):
                 vessel_name_csv = None
 
             if vessel_name_csv:
-                vessels = Vessel.objects.all()
-                for vessel in vessels:
-                    if vessel.full_vessel_name == vessel_name_csv:
-                        vessel_obj = vessel
-                        break
-                # Create new Vessel obj if missing
-                if not vessel_obj:
-                    vessel_obj = Vessel.objects.create(vessel_name = vessel_name_csv)
+                # update or create Cruise object based on CUID field
+                vessel_obj, vessel_created = Vessel.objects.get_or_create(
+                    vessel_name = vessel_name_csv,
+                )
 
             # update or create Cruise object based on CUID field
             cruise_obj, created = Cruise.objects.update_or_create(
@@ -272,7 +267,7 @@ def parse_vessel_files(self):
         vessels_created = []
         vessels_updated = []
         for row in reader:
-            vessel_name = row['Vessel Name']
+            vessel_name = row['Vessel Name'].strip()
             MMSI_number = None
             IMO_number = None
             length = None
@@ -338,7 +333,6 @@ def parse_vessel_files(self):
 def parse_deployment_files(self):
     csv_files = cache.get('dep_files')
     for csv_file in csv_files:
-        print(csv_file)
         csv_file.seek(0)
         reader = csv.DictReader(io.StringIO(csv_file.read().decode('utf-8')))
         headers = reader.fieldnames

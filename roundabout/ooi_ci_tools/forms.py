@@ -32,6 +32,7 @@ from decimal import Decimal
 
 
 from django import forms
+from django.db import transaction
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -40,7 +41,7 @@ from .models import ImportConfig
 from roundabout.inventory.models import Inventory, Action, Deployment
 from roundabout.cruises.models import Cruise, Vessel
 from roundabout.inventory.utils import _create_action_history
-from roundabout.calibrations.models import CoefficientName, CoefficientValueSet, CalibrationEvent
+from roundabout.calibrations.models import CoefficientName, CoefficientValueSet, CalibrationEvent, CoefficientNameEvent
 from roundabout.calibrations.forms import validate_coeff_vals, parse_valid_coeff_vals
 from roundabout.configs_constants.models import ConfigName
 from roundabout.users.models import User
@@ -817,7 +818,8 @@ def validate_cal_files(csv_files,ext_files):
         try:
             inv_manufacturer_serial = FieldValue.objects.get(inventory=inventory_item,field=custom_field,is_current=True)
         except FieldValue.DoesNotExist:
-            inv_manufacturer_serial = ''
+            inv_keys = {'field_value': ''}
+            inv_manufacturer_serial = SimpleNamespace(**inv_keys)
         for idx, row in enumerate(reader):
             row_data = row.items()
             for key, value in row_data:
@@ -839,6 +841,13 @@ def validate_cal_files(csv_files,ext_files):
                             )
                 if key == 'name':
                     calibration_name = value.strip()
+                    try:
+                        assert len(calibration_name) > 0
+                    except:
+                        raise ValidationError(
+                            _('File: %(filename)s, Calibration Name: %(value)s, Row %(row)s: Calibration Name is blank'),
+                            params={'value': calibration_name, 'row': idx, 'filename': cal_csv.name},
+                        )
                     try:
                         cal_name_item = CoefficientName.objects.get(
                             calibration_name = calibration_name,
